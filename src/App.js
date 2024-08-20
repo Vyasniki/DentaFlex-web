@@ -10,6 +10,17 @@ import SignUp from './components/SignUp/index.tsx';
 import Recover from './components/Recover/index.tsx';
 import Booking from './components/Booking/index.tsx';
 function App() {
+
+  const requireAuth = (nextState, replace, next) => {
+    console.log("HEYA")
+    if(true){
+      replace({
+        pathname: "/login",
+        state: {nextPathname : nextState.location.pathname}
+      });
+    }
+    next();
+  }
   // initialize a browser router
   const router = createBrowserRouter([
     {
@@ -25,24 +36,31 @@ function App() {
       {
         path: "/login",
         element: <Login />,
+        onEnter: {requireAuth}
+
       },
       {
         path: "/signup",
         element: <SignUp />,
+        onEnter: {requireAuth}
+
       },
       {
         path: "/recover",
-        element: <Recover />
+        element: <Recover />,
+        onEnter: {requireAuth}
+
       },
       {
         path: "/book",
-        element: <Booking/>
+        element: <Booking/>,
+        render: {requireAuth}
       }
     ]
   }
   ])
   return (
-    <RouterProvider  router={router}>
+    <RouterProvider  router={router} >
     {/* <div className="App">
      <ResponsiveAppBar />
      {/* <Home/> */}
