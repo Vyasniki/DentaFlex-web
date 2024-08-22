@@ -13,19 +13,35 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../shared/hooks/AuthProvider';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const [errorMessage, setErrorMessage] = React.useState("");
+
+  const auth = useAuth();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    // console.log({
+      const username = data.get('email');
+      const password = data.get('password');
+      const firstName = data.get('firstName');
+      const lastName = data.get('lastName');
+    // });
+    try{
+      if (username !== "" && password !== "" && firstName !== "" && lastName !== "") {
+        auth.signUpAction(data);
+        return;
+      }
+      alert("pleae provide a valid input");
+    }catch(ex) {
+      console.log("Error Occured" , ex);
+      setErrorMessage("Credentials didn't match!")
+    }
   };
 
   return (
@@ -47,6 +63,7 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+           
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
@@ -105,6 +122,11 @@ export default function SignUp() {
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
+            <Grid container>
+                {errorMessage && <Grid item>
+                  {errorMessage}
+                </Grid>}
+              </Grid>
               <Grid item>
                 <NavLink to="/login" >
                   Already have an account? Sign in

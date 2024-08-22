@@ -5,36 +5,32 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { NavLink } from 'react-router-dom';
-import { LoginFn } from '../../shared/services/auth';
-
+import { createTheme } from '@mui/material/styles';
+import { Navigate, NavLink } from 'react-router-dom';
+import { useAuth } from '../../shared/hooks/AuthProvider';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function Login() {
   const [errorMessage, setErrorMessage] = React.useState("");
+  const auth = useAuth();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // console.log({
       const username= data.get('email');
       const password= data.get('password');
-    // });
-    try{
-      const res = await LoginFn(username,password);
-      console.log(res)
-      if(res.status === 200){
-        console.log("Success");
-        setErrorMessage('')
-      }
     
+    try{
+      if (username !== "" && password !== "") {
+        auth.loginAction(data);
+        return;
+      }
+      alert("pleae provide a valid input");
     }catch(ex) {
       console.log("Error Occured" , ex);
       setErrorMessage("Credentials didn't match!")
@@ -43,7 +39,9 @@ export default function Login() {
   
 
   return (
-    // <ThemeProvider theme={defaultTheme}>
+    auth.token ? (
+      <Navigate to="/book" /> // Redirect upon successful login
+  ) : ( 
       <Container component="main" maxWidth="xs" sx={{marginBottom :'10vh'}}>
         <CssBaseline />
         <Box
@@ -116,6 +114,7 @@ export default function Login() {
           </Box>
         </Box>
       </Container>
-    
+  )
   );
+  
 }

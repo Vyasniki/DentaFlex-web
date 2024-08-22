@@ -1,14 +1,11 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-function PrivateRoute({ component: Component, ...rest }) {
-  const isAuthenticated = /* Check if the user is authenticated */ false;
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
-      }
-    />
-  );
-}
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../hooks/AuthProvider";
+
+const PrivateRoute = () => {
+  const user = useAuth();
+  if (!user.token) return <Navigate to="/auth/login" />;
+  return <Outlet />;
+};
+
 export default PrivateRoute;

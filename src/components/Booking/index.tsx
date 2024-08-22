@@ -14,6 +14,8 @@ import Container from '@mui/material/Container';
 import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import Calendar from '../Calender/index.tsx';
 import { Chip, Divider, Paper, Stack } from '@mui/material';
+import { useAuth } from '../../shared/hooks/AuthProvider.js';
+// import { UserContext } from '../../shared/hooks/AuthProvider.js';
 
 
 
@@ -21,6 +23,11 @@ import { Chip, Divider, Paper, Stack } from '@mui/material';
 const defaultTheme = createTheme();
 
 export default function Booking() {
+  // const user = React.useContext(UserContext);
+
+  // console.log(user ,"USER CONTEXT")
+  const auth = useAuth();
+  console.log("AUTh", auth.isAuthenticated)
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
