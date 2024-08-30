@@ -15,30 +15,33 @@ import Diversity3Icon from '@mui/icons-material/Diversity3';
 import { useAuth } from '../hooks/AuthProvider';
 import { Link } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = [
+  { name: 'Home', path: '/' },
+  { name: 'Pricing', path: '/pricing' },
+  { name: 'Contact Us', path: '/contact' }
+];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const auth = useAuth ();
+  const auth = useAuth();
+  
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
-  const handleCloseUserMenu = (e) => {
+  const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
   const logoutAction = () => {
     auth.logOut();
-  }
+  };
 
   return (
     <AppBar position="sticky">
@@ -49,11 +52,11 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="#"
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              fontFamily: 'inherit', // Inherited font
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
@@ -93,8 +96,14 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Typography
+                    component={Link}
+                    to={page.path}
+                    sx={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    {page.name}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -104,12 +113,12 @@ function ResponsiveAppBar() {
             variant="h5"
             noWrap
             component="a"
-            href="#"
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: 'inherit', // Inherited font
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
@@ -118,52 +127,83 @@ function ResponsiveAppBar() {
           >
             Denta Flex
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
+                component={Link}
+                to={page.path}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'inherit' }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
-            { !auth.token && (
-              <Link to="/login"> <Typography textAlign="center" >Login | Register</Typography></Link>
-            )}
-          {auth.token && (<Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+
+          {!auth.token && (
+            <Link
+              to="/login"
+              style={{
+                textDecoration: 'none',
+                color: 'white',
+                backgroundColor: '#798C77',
+                fontFamily: 'inherit', // Inherited font
+                fontWeight: 'bold',
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid white',
+                transition: 'background-color 0.3s ease-in-out',
               }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = 'white';
+                e.target.style.color = '#798C77';
               }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = '#798C77';
+                e.target.style.color = 'white';
+              }}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={ () => {  logoutAction(); handleCloseUserMenu();}}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>)}
+              Login | Register
+            </Link>
+          )}
+
+          {auth.token && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={() => { logoutAction(); handleCloseUserMenu(); }}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;

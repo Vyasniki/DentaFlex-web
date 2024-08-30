@@ -10,6 +10,10 @@ import SignUp from './components/SignUp/index.tsx';
 import Recover from './components/Recover/index.tsx';
 import Booking from './components/Booking/index.tsx';
 import AuthProvider from './shared/hooks/AuthProvider.js';
+import PricingComponent from './components/Pricing/index.tsx';
+import ContactUs from './components/Contact/index.tsx';
+import ForgotPassword from './components/Resetpwd/index.tsx';
+import PrivacyPolicy from './components/Privacy/index.tsx';
 
 function App() {
 
@@ -38,13 +42,25 @@ function App() {
 
       },
       {
-        path: "/auth/recover",
-        element: <Recover />
+        path: "/recover",
+        element: <ForgotPassword />
 
       },
       {
         path: "/book",
         element: <Booking/>
+      },
+      {
+        path: "/pricing",
+        element: <PricingComponent />
+      },
+      {
+        path: "/contact",
+        element: <ContactUs />
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />
       }
     ]
   }
