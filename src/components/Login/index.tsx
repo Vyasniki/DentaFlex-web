@@ -100,7 +100,7 @@ export default function Login() {
               <Grid container>
               
                 <Grid item xs>
-                  <NavLink to="/recover" >
+                  <NavLink to="/forgotpwd" >
                     Forgot password?
                   </NavLink>
                 </Grid>

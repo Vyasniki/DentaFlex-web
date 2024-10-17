@@ -7,38 +7,37 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-function ResetPassword() {
-  const { id,jwttoken } = useParams(); // Extract token from the URL params
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
-
+function ForgotPassword() {
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
-
+    const data = new FormData(event.currentTarget);
+    const email = data.get("email");
+    console.log({
+      email: data.get("email"),
+    });
     try {
-      const response = await fetch(`/api/auth/resetpwd/${id}/${jwttoken}`, {
+      const response = await fetch('/api/auth/resetpwd',{
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ password }),
-      });
-      const result = await response.json();
+        body: JSON.stringify({ email }),
+         });
+         const result = await response.json();
 
       if (response.ok) {
-        alert("Password reset successfully! Please login.");
+        alert("Password reset link sent to your email!");
       } else {
-        alert(result.msg || "Failed to reset password.");
+        alert(result.msg || "Something went wrong.");
       }
+
     } catch (error) {
-      console.error("Error resetting password", error);
+      console.error("error sending email link",error);
     }
+    
+    // Add logic to handle password reset
   };
 
   return (
@@ -60,38 +59,25 @@ function ResetPassword() {
           variant="h5"
           sx={{ fontFamily: "inherit", fontWeight: 700 }}
         >
-          Reset Password
+          Forgot Password
         </Typography>
         <Typography
           component="p"
           sx={{ textAlign: "center", mb: 2, fontFamily: "inherit" }}
         >
-          Please enter your new password.
+          Enter your email address and we'll send you a link to reset your
+          password.
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
             fullWidth
-            id="password"
-            label="New Password"
-            type="password"
-            name="password"
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            sx={{ fontFamily: "inherit" }}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
             sx={{ fontFamily: "inherit" }}
           />
           <Button
@@ -100,10 +86,11 @@ function ResetPassword() {
             variant="contained"
             sx={{ mt: 3, mb: 2, fontFamily: "inherit", fontWeight: "bold" }}
           >
-            Reset Password
+            Send Reset Link
           </Button>
           <Link
             to="/login"
+           // variant ="body2"
             style={{ textDecoration: "none", fontFamily: "inherit" }}
           >
             {"Remember your password? Login"}
@@ -114,4 +101,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default ForgotPassword;
