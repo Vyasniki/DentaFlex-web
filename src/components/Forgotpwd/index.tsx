@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
 
 function ForgotPassword() {
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
@@ -18,7 +18,7 @@ function ForgotPassword() {
       email: data.get("email"),
     });
     try {
-      const response = await fetch('/api/auth/resetpwd',{
+      const response = await fetch('/api/auth/forgotpwd',{
         method: "POST",
         headers: {
           "Content-Type": "application/json",

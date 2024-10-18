@@ -7,22 +7,27 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 function ResetPassword() {
   const { id,jwttoken } = useParams(); // Extract token from the URL params
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const data = new FormData(event.currentTarget);
+   
+    const password= data.get('password');
+   console.log(password);
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
     try {
-      const response = await fetch(`/api/auth/resetpwd/${id}/${jwttoken}`, {
+      const response = await fetch(`/api/auth/reset/${id}/${jwttoken}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,12 +35,16 @@ function ResetPassword() {
         body: JSON.stringify({ password }),
       });
       const result = await response.json();
-
-      if (response.ok) {
-        alert("Password reset successfully! Please login.");
-      } else {
-        alert(result.msg || "Failed to reset password.");
+      if (!response.ok) {
+        const errorData = await response.json(); // Try to parse the error response
+        console.log(errorData.msg || 'Something went wrong');
+        return;
       }
+     
+        alert("Password reset successfully! Please login.");
+        navigate("/login");
+    
+      
     } catch (error) {
       console.error("Error resetting password", error);
     }
