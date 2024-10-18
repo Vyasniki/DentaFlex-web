@@ -22,11 +22,11 @@ export default function Login() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-      const username= data.get('email');
+      const email= data.get('email');
       const password= data.get('password');
     
     try{
-      if (username !== "" && password !== "") {
+      if (email !== "" && password !== "") {
         auth.loginAction(data);
         return;
       }
@@ -100,7 +100,7 @@ export default function Login() {
               <Grid container>
               
                 <Grid item xs>
-                  <NavLink to="/recover" >
+                  <NavLink to="/forgotpwd" >
                     Forgot password?
                   </NavLink>
                 </Grid>
