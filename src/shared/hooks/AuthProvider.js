@@ -26,7 +26,10 @@ const AuthProvider = ({ children }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Login failed:', errorData.msg); // Log error message
+        console.error('Login failed:', errorData.msg); // Log error   
+     // Check msg and status and based on that show error messages 
+  
+
         return; // Stop execution if login fails
     }
       const res = await response.json();

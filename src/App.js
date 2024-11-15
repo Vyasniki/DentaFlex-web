@@ -45,7 +45,6 @@ function App() {
       {
         path: "/forgotpwd",
         element: <ForgotPassword />
-
       },
       {
         path: "/resetpwd/:id/:jwttoken",
