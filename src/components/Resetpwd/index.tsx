@@ -40,7 +40,7 @@ function ResetPassword() {
         console.log(errorData.msg || 'Something went wrong');
         return;
       }
-     
+      
         alert("Password reset successfully! Please login.");
         navigate("/login");
     

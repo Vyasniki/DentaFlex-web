@@ -17,15 +17,16 @@ function ForgotPassword() {
     console.log({
       email: data.get("email"),
     });
+
     try {
-      const response = await fetch('/api/auth/forgotpwd',{
+      const response = await fetch('/api/auth/forgotpwd', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
-         });
-         const result = await response.json();
+      });
+      const result = await response.json();
 
       if (response.ok) {
         alert("Password reset link sent to your email!");
@@ -34,10 +35,10 @@ function ForgotPassword() {
       }
 
     } catch (error) {
-      console.error("error sending email link",error);
+      console.error("error sending email link", error);
     }
-    
-    // Add logic to handle password reset
+
+
   };
 
   return (
@@ -90,7 +91,7 @@ function ForgotPassword() {
           </Button>
           <Link
             to="/login"
-           // variant ="body2"
+            // variant ="body2"
             style={{ textDecoration: "none", fontFamily: "inherit" }}
           >
             {"Remember your password? Login"}
